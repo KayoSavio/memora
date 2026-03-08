@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Soft romantic palette */
+  --bg-primary: #FFF5F7;
+  --bg-secondary: #FFFFFF;
+  --accent-pink: #FF6B8A;
+  --accent-pink-light: #FFD1DC;
+  --accent-lavender: #C4B1D4;
+  --accent-peach: #FFDAB9;
+  --accent-mint: #B5EAD7;
+  --accent-sky: #B8D4E3;
+  --accent-gold: #FFE4A0;
+  --accent-coral: #FF9AA2;
+
+  --text-primary: #2D2B3D;
+  --text-secondary: #6B6889;
+  --text-muted: #A9A6BE;
+
+  --card-shadow: 0 4px 20px rgba(45, 43, 61, 0.06);
+  --card-shadow-hover: 0 8px 30px rgba(255, 107, 138, 0.15);
+
+  --radius: 20px;
+  --radius-lg: 28px;
+  --radius-pill: 50px;
+
+  --font-display: 'Poppins', sans-serif;
+  --font-body: 'Quicksand', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+}
+
+input,
+select,
+textarea {
+  font-family: var(--font-body);
+}
+
+/* Hide scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
