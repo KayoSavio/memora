@@ -1,31 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
 
 :root {
-  /* Soft romantic palette */
-  --bg-primary: #FFF5F7;
-  --bg-secondary: #FFFFFF;
-  --accent-pink: #FF6B8A;
-  --accent-pink-light: #FFD1DC;
-  --accent-lavender: #C4B1D4;
-  --accent-peach: #FFDAB9;
-  --accent-mint: #B5EAD7;
-  --accent-sky: #B8D4E3;
-  --accent-gold: #FFE4A0;
-  --accent-coral: #FF9AA2;
+  --bg-primary: #f4f6ff;
+  --bg-secondary: #ffffff;
+  --bg-surface: #fbfcff;
+  --accent-pink: #ff4d8d;
+  --accent-pink-light: #ffe2ee;
+  --accent-violet: #7b61ff;
+  --accent-mint: #4fd1b8;
+  --accent-gold: #ffbe55;
 
-  --text-primary: #2D2B3D;
-  --text-secondary: #6B6889;
-  --text-muted: #A9A6BE;
+  --text-primary: #1e2234;
+  --text-secondary: #4f5574;
+  --text-muted: #8990ad;
 
-  --card-shadow: 0 4px 20px rgba(45, 43, 61, 0.06);
-  --card-shadow-hover: 0 8px 30px rgba(255, 107, 138, 0.15);
+  --card-shadow: 0 16px 44px rgba(45, 52, 93, 0.08);
+  --card-shadow-hover: 0 22px 56px rgba(94, 67, 187, 0.16);
 
-  --radius: 20px;
+  --radius: 18px;
   --radius-lg: 28px;
-  --radius-pill: 50px;
+  --radius-pill: 999px;
 
-  --font-display: 'Poppins', sans-serif;
-  --font-body: 'Quicksand', sans-serif;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
 }
 
 * {
@@ -37,6 +34,10 @@
 body {
   font-family: var(--font-body);
   background-color: var(--bg-primary);
+  background-image:
+    radial-gradient(circle at 10% -20%, rgba(123, 97, 255, 0.13), transparent 42%),
+    radial-gradient(circle at 95% -5%, rgba(255, 77, 141, 0.16), transparent 34%),
+    radial-gradient(circle at 20% 95%, rgba(79, 209, 184, 0.12), transparent 32%);
   color: var(--text-primary);
   min-height: 100vh;
   margin: 0;
@@ -67,7 +68,6 @@ textarea {
   font-family: var(--font-body);
 }
 
-/* Hide scrollbar */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
