@@ -210,6 +210,8 @@ function Dashboard({ user, onSelectPerson, onLogout }: { user: User; onSelectPer
   };
 
   const displayName = user.user_metadata?.display_name || user.email?.split('@')[0] || 'você';
+  const totalMemories = Object.values(memoryCounts).reduce((sum, count) => sum + count, 0);
+  const peopleWithPhoto = people.filter((person) => Boolean(person.photo_url)).length;
 
   return (
     <div className="app-layout">
@@ -221,11 +223,32 @@ function Dashboard({ user, onSelectPerson, onLogout }: { user: User; onSelectPer
       <div className="welcome-section">
         <p className="welcome-text">Olá, {displayName} 👋</p>
         <h1 className="welcome-title">Suas pessoas <span>especiais</span></h1>
+        <div className="dashboard-kpis">
+          <div className="kpi-card">
+            <span className="kpi-label">Pessoas</span>
+            <strong>{people.length}</strong>
+          </div>
+          <div className="kpi-card">
+            <span className="kpi-label">Memórias</span>
+            <strong>{totalMemories}</strong>
+          </div>
+          <div className="kpi-card">
+            <span className="kpi-label">Com foto</span>
+            <strong>{peopleWithPhoto}</strong>
+          </div>
+        </div>
       </div>
 
       <section className="people-section">
         <p className="section-label">{people.length} {people.length === 1 ? 'pessoa' : 'pessoas'}</p>
         <div className="people-grid">
+          {people.length === 0 && (
+            <div className="person-card person-card-empty">
+              <div className="person-card-empty-icon">✨</div>
+              <span className="person-card-name">Comece seu cantinho</span>
+              <p className="person-card-empty-text">Adicione a primeira pessoa para salvar memórias, fotos e planos incríveis.</p>
+            </div>
+          )}
           {people.map((person) => (
             <div key={person.id} className="person-card" onClick={() => onSelectPerson(person)}>
               <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 4, background: person.color, borderRadius: '28px 28px 0 0' }} />
@@ -470,7 +493,7 @@ function PersonDetail({ person: initialPerson, onBack, user }: { person: Person;
         <div>
           <h1 className="person-name">{person.nickname || person.name}</h1>
           {person.nickname && <p className="person-birth" style={{ fontWeight: 600 }}>{person.name}</p>}
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.3rem' }}>
+          <div className="person-meta-tags">
             {person.zodiac_sign && <span className="mini-tag">{person.zodiac_sign}</span>}
             {person.birthdate && <span className="mini-tag">🎂 {new Date(person.birthdate + 'T00:00:00').toLocaleDateString('pt-BR')}</span>}
             <span className="mini-tag">{getRelationshipLabel(person.relationship)}</span>
@@ -514,26 +537,26 @@ function PersonDetail({ person: initialPerson, onBack, user }: { person: Person;
         <button className="add-memory-btn" onClick={() => setShowAddMemory(true)}>+ Adicionar memória</button>
       </div>
 
-      <div className="extras-area" style={{ padding: '1rem 1.5rem 3rem' }}>
+      <div className="extras-area">
         {/* MURAL DE FOTOS */}
-        <div className="category-section" style={{ marginTop: '2rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 className="category-title" style={{ marginTop: 0 }}>Nosso Mural 📸</h3>
-            <label className="icon-btn" style={{ cursor: 'pointer', background: 'var(--bg-primary)', padding: '0.4rem', borderRadius: '12px' }}>
+        <div className="extras-card">
+          <div className="extras-header">
+            <h3 className="category-title extras-title">Nosso Mural 📸</h3>
+            <label className="icon-btn upload-photo-btn">
               <input type="file" accept="image/*" onChange={handleGridPhotoUpload} style={{ display: 'none' }} />
               <span style={{ fontSize: '1.2rem', display: 'block', lineHeight: 1 }}>{uploadingPhotoGrid ? '⏳' : '➕'}</span>
             </label>
           </div>
           {photos.length === 0 ? (
-            <div className="empty-state" style={{ padding: '1.5rem' }}>
+            <div className="empty-state empty-state-compact">
               <p>Nenhuma foto no mural ainda. Guarde os seus melhores momentos juntos! ✨</p>
             </div>
           ) : (
-            <div className="photo-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: '12px', marginTop: '1rem' }}>
+            <div className="photo-grid">
               {photos.map(p => (
-                <div key={p.id} style={{ position: 'relative', aspectRatio: '1', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
-                  <img src={p.photo_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  <button onClick={() => deletePhoto(p.id)} style={{ position: 'absolute', top: 6, right: 6, background: 'rgba(0,0,0,0.4)', color: 'white', border: 'none', borderRadius: '50%', width: 26, height: 26, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', backdropFilter: 'blur(4px)' }}>✕</button>
+                <div key={p.id} className="photo-item">
+                  <img src={p.photo_url} className="photo-item-image" />
+                  <button onClick={() => deletePhoto(p.id)} className="photo-delete-btn">✕</button>
                 </div>
               ))}
             </div>
@@ -541,19 +564,19 @@ function PersonDetail({ person: initialPerson, onBack, user }: { person: Person;
         </div>
 
         {/* PLANOS E METAS */}
-        <div className="category-section" style={{ marginTop: '2.5rem' }}>
-          <h3 className="category-title" style={{ marginTop: 0 }}>Planos & Metas ✨</h3>
-          <div className="plans-list" style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', marginTop: '1rem' }}>
+        <div className="extras-card">
+          <h3 className="category-title extras-title">Planos & Metas ✨</h3>
+          <div className="plans-list">
             {plans.map(plan => (
-              <div key={plan.id} style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', background: 'var(--bg-primary)', padding: '0.8rem 1rem', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.02)' }}>
-                <input type="checkbox" checked={plan.is_completed} onChange={() => togglePlan(plan.id, plan.is_completed)} style={{ width: '22px', height: '22px', cursor: 'pointer', accentColor: 'var(--accent-pink)' }} />
-                <span style={{ flex: 1, textDecoration: plan.is_completed ? 'line-through' : 'none', color: plan.is_completed ? 'var(--text-muted)' : 'var(--text-primary)', fontWeight: 600, fontSize: '0.95rem', transition: 'all 0.2s' }}>{plan.title}</span>
-                <button className="icon-btn" onClick={() => deletePlan(plan.id)} style={{ width: 32, height: 32, fontSize: '0.85rem' }}>🗑️</button>
+              <div key={plan.id} className="plan-item">
+                <input type="checkbox" checked={plan.is_completed} onChange={() => togglePlan(plan.id, plan.is_completed)} className="plan-checkbox" />
+                <span className={`plan-title ${plan.is_completed ? 'completed' : ''}`}>{plan.title}</span>
+                <button className="icon-btn plan-delete-btn" onClick={() => deletePlan(plan.id)}>🗑️</button>
               </div>
             ))}
-            <form onSubmit={addPlan} style={{ display: 'flex', gap: '0.5rem', marginTop: '0.8rem' }}>
-              <input type="text" className="modal-input" placeholder="Novo plano (Ex: Viagem pra praia)..." value={newPlanTitle} onChange={e => setNewPlanTitle(e.target.value)} style={{ flex: 1, padding: '1rem 1.2rem', borderRadius: '16px' }} />
-              <button type="submit" disabled={saving || !newPlanTitle.trim()} style={{ background: 'var(--accent-pink)', color: 'white', border: 'none', borderRadius: '16px', padding: '0 1.2rem', fontWeight: 600, cursor: 'pointer', fontSize: '1.2rem', boxShadow: '0 4px 15px rgba(255,107,138,0.2)' }}>+</button>
+            <form onSubmit={addPlan} className="plan-form">
+              <input type="text" className="modal-input plan-input" placeholder="Novo plano (Ex: Viagem pra praia)..." value={newPlanTitle} onChange={e => setNewPlanTitle(e.target.value)} />
+              <button type="submit" disabled={saving || !newPlanTitle.trim()} className="plan-add-btn">+</button>
             </form>
           </div>
         </div>
